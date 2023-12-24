@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('purchase_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('purchase_id')->constrained('purchases')->references('id')->onDelete('cascade');
-            $table->foreignId('inventori_id')->constrained('inventoris')->references('id')->onDelete('cascade');
+            $table->foreignId('inventori_id')->constrained('inventories')->references('id')->onDelete('cascade');
             $table->integer('qty');
             $table->decimal('price', 10, 2);
             $table->timestamps();

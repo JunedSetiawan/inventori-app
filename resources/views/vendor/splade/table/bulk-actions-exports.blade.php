@@ -20,38 +20,41 @@
                 </span>
             </h3>
 
-            @foreach($table->getBulkActions() as $bulkAction)
-            <button v-if="table.hasSelectedItems"
-                class="text-left w-full px-4 py-2 text-sm text-base-content hover:bg-base-200  font-normal"
-                @click.prevent="table.performBulkAction(
+            @foreach ($table->getBulkActions() as $bulkAction)
+                <button v-if="table.hasSelectedItems"
+                    class="text-left w-full px-4 py-2 text-sm text-base-content hover:bg-base-200  font-normal"
+                    @click.prevent="table.performBulkAction(
                         @js($bulkAction->getUrl()),
                         @js($bulkAction->confirm),
                         @js($bulkAction->confirmText),
                         @js($bulkAction->confirmButton),
                         @js($bulkAction->cancelButton),
                         @js($bulkAction->requirePassword)
-                    )" dusk="action.{{ $bulkAction->getSlug() }}">
-                {{ $bulkAction->label }}
-            </button>
+                    )"
+                    dusk="action.{{ $bulkAction->getSlug() }}">
+                    {{ $bulkAction->label }}
+                </button>
             @endforeach
 
-            @if($table->hasExports() && $table->hasBulkActions())
-            <div v-if="table.hasSelectedItems" class="border-t border-base-300 shadow w-full"></div>
+            @if ($table->hasExports() && $table->hasBulkActions())
+                <div v-if="table.hasSelectedItems" class="border-t border-base-300 shadow w-full"></div>
             @endif
 
-            @if($table->hasExports())
-            <h3 class="text-xs uppercase tracking-wide bg-base-300 px-4 py-2">
-                {{ __('Export results') }}
-            </h3>
-            @endif
+            @can('manage-report')
+                @if ($table->hasExports())
+                    <h3 class="text-xs uppercase tracking-wide bg-base-300 px-4 py-2">
+                        {{ __('Export results') }}
+                    </h3>
+                @endif
 
-            @foreach($table->getExports() as $export)
-            <a download
-                class="text-left w-full px-4 py-2 text-sm text-base-content bg-base-100 hover:bg-base-200 font-normal"
-                href="{{ $export->getUrl() }}" dusk="action.{{ $export->getSlug() }}">
-                {{ $export->label }}
-            </a>
-            @endforeach
+                @foreach ($table->getExports() as $export)
+                    <a download
+                        class="text-left w-full px-4 py-2 text-sm text-base-content bg-base-100 hover:bg-base-200 font-normal"
+                        href="{{ $export->getUrl() }}" dusk="action.{{ $export->getSlug() }}">
+                        {{ $export->label }}
+                    </a>
+                @endforeach
+            @endcan
         </div>
     </div>
 </x-splade-component>

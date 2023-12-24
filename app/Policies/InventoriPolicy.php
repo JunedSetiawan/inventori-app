@@ -9,14 +9,6 @@ use Illuminate\Auth\Access\Response;
 class InventoriPolicy
 {
 
-    public function before(User $user, $ability)
-    {
-        if ($user->isSuperAdmin()) {
-            return true;
-        }
-
-        return Response::deny('You are not allowed to do this.');
-    }
     /**
      * Determine whether the user can view any models.
      */
@@ -25,6 +17,8 @@ class InventoriPolicy
         if ($user->isSuperAdmin() || $user->isManager()) {
             return true;
         }
+
+        return false;
     }
 
 

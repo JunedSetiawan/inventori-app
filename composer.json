@@ -18,6 +18,7 @@
         "protonemedia/laravel-splade-breeze": "^2.5"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.9",
         "fakerphp/faker": "^1.9.1",
         "laravel/dusk": "^7.7",
         "laravel/pint": "^1.0",

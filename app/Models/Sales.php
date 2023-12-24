@@ -15,6 +15,8 @@ class Sales extends Model
         'user_id',
     ];
 
+
+
     protected static function boot()
     {
         parent::boot();
