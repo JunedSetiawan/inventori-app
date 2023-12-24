@@ -42,7 +42,6 @@ Route::middleware('splade')->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
-
-    require __DIR__ . '/documentation.php';
+    
     require __DIR__ . '/auth.php';
 });

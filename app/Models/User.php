@@ -42,4 +42,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function isManager(): bool
+    {
+        return $this->role === 'manager';
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super-admin';
+    }
+
+    public function isSales(): bool
+    {
+        return $this->role === 'sales';
+    }
+
+    public function isPurchase(): bool
+    {
+        return $this->role === 'purchase';
+    }
 }
