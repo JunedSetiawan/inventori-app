@@ -25,4 +25,9 @@ class SalesDetail extends Model
     {
         return $this->belongsTo(Inventori::class);
     }
+
+    public function getSubTotalAttribute()
+    {
+        return $this->qty * $this->price;
+    }
 }

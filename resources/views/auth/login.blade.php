@@ -9,7 +9,7 @@
             <!-- Session Status -->
             <x-auth-session-status class="mb-4" />
 
-            <x-splade-form action="{{ route('login') }}" class="space-y-4">
+            <x-splade-form action="{{ route('login.store') }}" class="space-y-4">
                 <!-- Email Address -->
                 <x-splade-input id="email" type="email" name="email" :label="__('Email')" required autofocus
                     float="true" />
@@ -21,16 +21,17 @@
 
                 <div class="mt-6 text-center">
                     @if (Route::has('password.request'))
-                    <Link class="underline text-sm text-base-content hover:text-neutral"
-                        href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                    </Link>
+                        <Link class="underline text-sm text-base-content hover:text-neutral"
+                            href="{{ route('password.request') }}">
+                        {{ __('Forgot your password?') }}
+                        </Link>
                     @endif
                     <br>
                     @if (Route::has('register'))
-                    <Link class="underline text-sm text-base-content hover:text-neutral" href="{{ route('register') }}">
-                    {{ __('Dont have an account? Sign up') }}
-                    </Link>
+                        <Link class="underline text-sm text-base-content hover:text-neutral"
+                            href="{{ route('register') }}">
+                        {{ __('Dont have an account? Sign up') }}
+                        </Link>
                     @endif
                 </div>
             </x-splade-form>

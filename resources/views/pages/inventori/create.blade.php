@@ -8,8 +8,8 @@
         @csrf
         <x-splade-input name="name" label="Name" />
 
-        <x-splade-input name="price" label="Price" type="number" />
-        <x-splade-input name="stock" label="Stock" type="number" />
+        <x-splade-input name="price" label="Price" type="number" min="1000" />
+        <x-splade-input name="stock" label="Stock" type="number" min="0" />
 
     </x-splade-form>
 </x-app-layout>

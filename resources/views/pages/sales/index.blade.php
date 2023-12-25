@@ -4,7 +4,7 @@
     </x-slot>
 
     @can('manage-sales')
-        <Link href="{{ route('sales.create') }}" class="btn btn-secondary mb-4">Create</Link>
+        <a href="{{ route('sales.create') }}" class="btn btn-secondary mb-4">Create</a>
     @endcan
     <x-splade-table :for="$sales">
         @can('manage-sales')

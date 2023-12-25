@@ -24,7 +24,7 @@ class SalesPolicy
     public function view(User $user, Sales $sales): bool
     {
         if ($user->isSales()) {
-            return $user->id == $sales->user_id;
+            return $user->id == $sales->salesDetail->user_id;
         }
     }
 

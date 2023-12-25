@@ -23,7 +23,7 @@
 
 <body class="font-sans antialiased">
     @splade
-
+    <script src="/js/script.js"></script>
 </body>
 
 </html>

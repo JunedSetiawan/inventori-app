@@ -54,12 +54,15 @@ class Sale extends AbstractTable
         $table
             ->withGlobalSearch(columns: ['number'])
             ->column('number', 'Number')
-            ->column('date', 'Date', as: fn ($date, $user) => $date->format('d M Y'), sortable: true)
+            ->column('date', 'Date', sortable: true)
             ->column('user.name', 'User')
             ->column('Actions')
             ->export('Excel export', 'export.xlsx', Excel::XLSX)
             ->export('CSV export', 'export.csv', Excel::CSV)
             ->export('PDF export', 'export.pdf', Excel::DOMPDF)
+            ->rowSlideover(fn (Sales $sales) => route('sales.show', [
+                'sales' => $sales,
+            ]))
 
             ->bulkAction('Delete', fn ($sales) => $sales->delete(), confirm: true, after: fn () => Toast::message('Inventori deleted successfully')->autoDismiss(5));
 
