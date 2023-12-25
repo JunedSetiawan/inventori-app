@@ -5,7 +5,7 @@
 
     <x-splade-modal>
         <x-splade-form class="bg-base-100 space-y-2 p-5" :default="$inventori"
-            action="{{ route('inventory.update', $inventori->id) }}" method="post">
+            action="{{ route('inventory.update', $inventori->id) }}" method="put">
             @csrf
             <x-splade-input name="name" label="Name" />
 

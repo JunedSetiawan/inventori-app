@@ -15,4 +15,14 @@ class PurchaseDetail extends Model
         'qty',
         'price',
     ];
+
+    public function purchase()
+    {
+        return $this->belongsTo(Purchase::class);
+    }
+
+    public function inventori()
+    {
+        return $this->belongsTo(Inventori::class);
+    }
 }

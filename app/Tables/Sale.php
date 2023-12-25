@@ -2,14 +2,14 @@
 
 namespace App\Tables;
 
-use App\Models\Inventori;
+use App\Models\Sales;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
 use ProtoneMedia\Splade\AbstractTable;
 use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\SpladeTable;
 
-class Inventories extends AbstractTable
+class Sale extends AbstractTable
 {
     /**
      * Create a new instance.
@@ -28,7 +28,7 @@ class Inventories extends AbstractTable
      */
     public function authorize(Request $request)
     {
-        if ($request->user()->isSuperAdmin() && $request->user()->can('delete', Inventori::class)) {
+        if ($request->user()->isSales() || $request->user()->isSuperAdmin() ||  $request->user()->can('delete', Sales::class)) {
             return true;
         }
     }
@@ -40,7 +40,7 @@ class Inventories extends AbstractTable
      */
     public function for()
     {
-        return Inventori::query()->latest();
+        return Sales::query()->latest();
     }
 
     /**
@@ -52,18 +52,22 @@ class Inventories extends AbstractTable
     public function configure(SpladeTable $table)
     {
         $table
-            ->withGlobalSearch(columns: ['name'])
-            ->searchInput('code', 'Code')
-            ->column('name', 'Name')
-            ->column('code', 'Code')
-            ->column('stock', 'Stock')
-            ->column('price', 'Price', as: fn ($price, $user) => 'Rp. ' . number_format($price, 0, ',', '.'))
-            ->column('created_at', 'Created At', as: fn ($created_at, $user) => $created_at->format('d M Y'))
+            ->withGlobalSearch(columns: ['number'])
+            ->column('number', 'Number')
+            ->column('date', 'Date', as: fn ($date, $user) => $date->format('d M Y'), sortable: true)
+            ->column('user.name', 'User')
             ->column('Actions')
             ->export('Excel export', 'export.xlsx', Excel::XLSX)
+            ->export('CSV export', 'export.csv', Excel::CSV)
+            ->export('PDF export', 'export.pdf', Excel::DOMPDF)
 
-            ->bulkAction('Delete', fn ($inventori) => $inventori->delete(), confirm: true, after: fn () => Toast::message('Inventori deleted successfully')->autoDismiss(5));
+            ->bulkAction('Delete', fn ($sales) => $sales->delete(), confirm: true, after: fn () => Toast::message('Inventori deleted successfully')->autoDismiss(5));
 
-        // ->rowSlideover(fn (Inventori $inventori) => route('inventory.edit', ['id' => $inventori->id]))
+        // ->searchInput()
+        // ->selectFilter()
+        // ->withGlobalSearch()
+
+        // ->bulkAction()
+        // ->export()
     }
 }

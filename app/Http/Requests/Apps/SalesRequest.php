@@ -22,7 +22,8 @@ class SalesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'date' => ['required', 'date'],
+
         ];
     }
 }

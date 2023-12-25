@@ -15,4 +15,14 @@ class SalesDetail extends Model
         'qty',
         'price',
     ];
+
+    public function sales()
+    {
+        return $this->belongsTo(Sales::class);
+    }
+
+    public function inventori()
+    {
+        return $this->belongsTo(Inventori::class);
+    }
 }

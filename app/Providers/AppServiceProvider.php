@@ -29,13 +29,31 @@ class AppServiceProvider extends ServiceProvider
 
         SEO::metaByName('theme-color', '#D926A9');
 
+        // permission for report manager
         Gate::define('manage-report', function (User $user) {
             return $user->isManager() || $user->isSuperAdmin();
         });
 
-        // permission for view inventory
+        // permission for view Apps
         Gate::define('view-inventory', function (User $user) {
             return $user->isSuperAdmin() || $user->isManager();
+        });
+        Gate::define('view-sales', function (User $user) {
+            return $user->isSuperAdmin() || $user->isSales() || $user->isManager();
+        });
+        Gate::define('view-purchase', function (User $user) {
+            return $user->isSuperAdmin() || $user->isPurchase() || $user->isManager();
+        });
+
+        // Permission for manage Apps
+        Gate::define('manage-inventory', function (User $user) {
+            return $user->isSuperAdmin();
+        });
+        Gate::define('manage-sales', function (User $user) {
+            return $user->isSuperAdmin() || $user->isSales();
+        });
+        Gate::define('manage-purchase', function (User $user) {
+            return $user->isSuperAdmin() || $user->isPurchase();
         });
     }
 }

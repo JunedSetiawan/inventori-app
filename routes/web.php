@@ -42,14 +42,11 @@ Route::middleware('splade')->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-        // create route for inventory
-        Route::get('/inventory', [InventoriController::class, 'index'])->name('inventory.index');
-        Route::get('/inventory/create', [InventoriController::class, 'create'])->name('inventory.create');
-        Route::post('/inventory', [InventoriController::class, 'store'])->name('inventory.store');
-        Route::get('/inventory/{id}/edit', [InventoriController::class, 'edit'])->name('inventory.edit');
-        Route::put('/inventory/{inventory:id}', [InventoriController::class, 'update'])->name('inventory.update');
-        Route::delete('/inventory/{inventory}', [InventoriController::class, 'destroy'])->name('inventory.destroy');
+        Route::post('/inventory/getInventory', [InventoriController::class, 'getInventory'])->name('inventory.getInventory');
     });
 
+    require __DIR__ . '/apps/inventory.php';
+    require __DIR__ . '/apps/purchase.php';
+    require __DIR__ . '/apps/sales.php';
     require __DIR__ . '/auth.php';
 });

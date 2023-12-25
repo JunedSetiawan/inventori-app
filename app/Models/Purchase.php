@@ -28,4 +28,9 @@ class Purchase extends Model
     {
         $this->attributes['number'] = 'INV' . date('Ymd') . '-' . sprintf('%04d', static::max('id') + 1);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

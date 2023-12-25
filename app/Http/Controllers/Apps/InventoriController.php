@@ -43,14 +43,44 @@ class InventoriController extends Controller
         return redirect()->route('inventory.index');
     }
 
-    public function edit($inventori): View
+    public function edit(Inventori $inventori): View
     {
         $this->spladeTitle('Edit Inventori');
-
-        $inventori = Inventori::find($inventori);
 
         return view('pages.inventori.edit', [
             'inventori' => $inventori,
         ]);
+    }
+
+    public function update(InventoriRequest $request, Inventori $inventori): RedirectResponse
+    {
+        $this->authorize('update', $inventori);
+
+        $inventori->update($request->validated());
+
+        Toast::message('Inventori updated successfully')->autoDismiss(5);
+
+        return redirect()->route('inventory.index');
+    }
+
+    public function getInventory(Request $request)
+    {
+        $search = $request->search;
+
+        if ($search == '') {
+            $inventories = Inventori::orderby('name', 'asc')->select('id', 'name')->limit(5)->get();
+        } else {
+            $inventories = Inventori::orderby('name', 'asc')->select('id', 'name')->where('name', 'like', '%' . $search . '%')->limit(5)->get();
+        }
+
+        $response = array();
+        foreach ($inventories as $inventory) {
+            $response[] = array(
+                "id" => $inventory->id,
+                "text" => $inventory->name
+            );
+        }
+
+        return response()->json($response);
     }
 }

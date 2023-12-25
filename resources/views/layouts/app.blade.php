@@ -14,9 +14,11 @@
 
             <footer class="footer footer-center p-4 bg-base-300 text-base-content">
                 <div>
-                    <p>Copyright © {{ \Carbon\Carbon::now()->format('Y') }} - All right reserved by {{ env('COPY_RIGHT') }}</p>
+                    <p>Copyright © {{ \Carbon\Carbon::now()->format('Y') }} - All right reserved by
+                        {{ env('COPY_RIGHT') }}</p>
                 </div>
             </footer>
         </div>
     </x-navigation>
+
 </div>
