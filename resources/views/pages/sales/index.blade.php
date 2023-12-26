@@ -9,8 +9,13 @@
     <x-splade-table :for="$sales">
         @can('manage-sales')
             <x-splade-cell Actions as="$sale">
-                <Link slideover href="{{ route('sales.edit', $sale->id) }}" class="btn btn-secondary">Edit</Link>
+                <div class="space-x-3">
+                    <a href="{{ route('sales.edit', $sale->id) }}" class="btn btn-secondary">Edit</a>
+                    <Link confirm href="{{ route('sales.destroy', $sale->id) }}" class="btn btn-error" method="DELETE">Delete
+                    </Link>
+                </div>
             </x-splade-cell>
         @endcan
     </x-splade-table>
 </x-app-layout>
+e

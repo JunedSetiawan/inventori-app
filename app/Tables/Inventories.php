@@ -28,7 +28,7 @@ class Inventories extends AbstractTable
      */
     public function authorize(Request $request)
     {
-        if ($request->user()->isSuperAdmin() && $request->user()->can('delete', Inventori::class)) {
+        if ($request->user()->isSuperAdmin() || $request->user()->can('manage-report') || $request->user()->can('delete', Inventori::class)) {
             return true;
         }
     }

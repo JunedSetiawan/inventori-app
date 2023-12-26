@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Apps\SalesController;
 
-
-Route::get('/sales', [SalesController::class, 'index'])->name('sales.index')->middleware('can:view-sales', 'auth');
-Route::get('/sales/{sales}', [SalesController::class, 'show'])->name('sales.show')->middleware('can:view-sales', 'auth');
+Route::middleware('can:view-sales', 'auth')->group(function () {
+    Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
+    Route::get('/sales/{sales}', [SalesController::class, 'show'])->name('sales.show');
+});
 
 Route::group(['middleware' => ['can:manage-sales', 'auth']], function () {
     Route::get('/sale/create', [SalesController::class, 'create'])->name('sales.create');
@@ -14,5 +15,5 @@ Route::group(['middleware' => ['can:manage-sales', 'auth']], function () {
     Route::put('/sale/{sales}', [SalesController::class, 'update'])->name('sales.update');
     Route::delete('/sale/{sales}', [SalesController::class, 'destroy'])->name('sales.destroy');
 
-    Route::get('sales/history', [SalesController::class, 'history'])->name('sales.history');
+    Route::get('sale/history', [SalesController::class, 'history'])->name('sales.history');
 });

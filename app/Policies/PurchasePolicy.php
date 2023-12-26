@@ -11,22 +11,13 @@ class PurchasePolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user): bool
     {
         if ($user->isSuperAdmin() || $user->isPurchase() || $user->isManager()) {
             return true;
         }
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Purchase $purchase): bool
-    {
-        if ($user->isPurchase()) {
-            return $user->id == $purchase->user_id;
-        }
-    }
 
     /**
      * Determine whether the user can create models.

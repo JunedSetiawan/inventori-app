@@ -2,14 +2,13 @@
 
 namespace App\Tables;
 
-use App\Models\Sales;
+use App\Models\Purchase;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
 use ProtoneMedia\Splade\AbstractTable;
-use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\SpladeTable;
 
-class Sale extends AbstractTable
+class PurchaseHistory extends AbstractTable
 {
     /**
      * Create a new instance.
@@ -28,9 +27,7 @@ class Sale extends AbstractTable
      */
     public function authorize(Request $request)
     {
-        if ($request->user()->isSales() || $request->user()->isSuperAdmin() || $request->user()->can('manage-report')  ||  $request->user()->can('delete', Sales::class)) {
-            return true;
-        }
+        return $request->user()->can('viewAny', Purchase::class);
     }
 
     /**
@@ -40,7 +37,7 @@ class Sale extends AbstractTable
      */
     public function for()
     {
-        return Sales::query()->latest();
+        return Purchase::query()->where('user_id', auth()->user()->id)->with('purchaseDetail')->latest();
     }
 
     /**
@@ -56,12 +53,11 @@ class Sale extends AbstractTable
             ->column('number', 'Number')
             ->column('date', 'Date', sortable: true)
             ->column('user.name', 'User')
-            ->column('Actions')
             ->export('Excel export', 'export.xlsx', Excel::XLSX)
             ->export('CSV export', 'export.csv', Excel::CSV)
             ->export('PDF export', 'export.pdf', Excel::DOMPDF)
-            ->rowSlideover(fn (Sales $sales) => route('sales.show', [
-                'sales' => $sales,
+            ->rowSlideover(fn (Purchase $purchase) => route('sales.show', [
+                'sales' => $purchase,
             ]));
 
         // ->searchInput()

@@ -34,11 +34,14 @@
                         </summary>
                         <ul class="ml-5 mt-2">
                             @foreach ($menu['menus'] as $submenu)
-                                <li>
-                                    <x-nav-link :href="route($submenu['route'])" :active="request()->routeIs($submenu['route'])">
-                                        {!! $submenu['icon'] !!} <span>{{ $submenu['title'] }}</span>
-                                    </x-nav-link>
-                                </li>
+                                @if (empty($submenu['permissions']) ||
+                                        auth()->user()->can($submenu['permissions']))
+                                    <li>
+                                        <x-nav-link :href="route($submenu['route'])" :active="request()->routeIs($submenu['route'])">
+                                            {!! $submenu['icon'] !!} <span>{{ $submenu['title'] }}</span>
+                                        </x-nav-link>
+                                    </li>
+                                @endif
                             @endforeach
                         </ul>
                     </details>

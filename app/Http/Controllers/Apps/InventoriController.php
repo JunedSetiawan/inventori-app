@@ -68,16 +68,16 @@ class InventoriController extends Controller
         $search = $request->search;
 
         if ($search == '') {
-            $inventories = Inventori::orderby('name', 'asc')->select('id', 'name')->limit(5)->get();
+            $inventories = Inventori::orderby('name', 'asc')->select('id', 'name', 'stock')->limit(5)->get();
         } else {
-            $inventories = Inventori::orderby('name', 'asc')->select('id', 'name')->where('name', 'like', '%' . $search . '%')->limit(5)->get();
+            $inventories = Inventori::orderby('name', 'asc')->select('id', 'name', 'stock')->where('name', 'like', '%' . $search . '%')->limit(5)->get();
         }
 
         $response = array();
         foreach ($inventories as $inventory) {
             $response[] = array(
                 "id" => $inventory->id,
-                "text" => $inventory->name
+                "text" => $inventory->name . ' , Stock(' . $inventory->stock . ')',
             );
         }
 

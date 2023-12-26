@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Apps;
 use App\Http\Controllers\Controller;
 use App\Models\Sales;
 use App\Tables\Sale;
+use App\Tables\SaleHistory;
 use Illuminate\Http\Request;
 use ProtoneMedia\Splade\Facades\Toast;
 
@@ -46,6 +47,19 @@ class SalesController extends Controller
                 'qty' => $value['qty'],
                 'price' => $value['price'],
             ]);
+
+            // stock in inventory
+            // Price will be reduced upon purchase
+
+            $inventori = \App\Models\Inventori::find($value['inventori_id']);
+
+            if ($inventori->stock >= $value['qty']) {
+                $inventori->stock = $inventori->stock - $value['qty'];
+            } else {
+                Toast::message('Stock is not enough')->autoDismiss(5);
+                return redirect()->back();
+            }
+            $inventori->save();
         }
 
         Toast::message('Data Sales Successfully Added')->autoDismiss(5);
@@ -57,7 +71,7 @@ class SalesController extends Controller
     {
         $this->spladeTitle('Detail Sales');
 
-        $sale = $sales->with('salesDetail')->first();
+        $sale = $sales->with('salesDetail')->find($sales->id);
 
         return view('pages.sales.show', [
             'sale' => $sale,
@@ -68,7 +82,7 @@ class SalesController extends Controller
     {
         $this->spladeTitle('Edit Sales');
 
-        $sale = $sales->with('salesDetail')->first();
+        $sale = $sales->with('salesDetail')->find($sales->id);
 
         return view('pages.sales.edit', [
             'sale' => $sale,
@@ -78,7 +92,6 @@ class SalesController extends Controller
     public function update(Request $request, Sales $sales)
     {
         $this->authorize('update', $sales);
-
         $request->validate([
             'field.*.inventori_id' => ['exists:inventories,id', 'required'],
             'date' => ['date', 'required'],
@@ -91,7 +104,16 @@ class SalesController extends Controller
             'user_id' => auth()->user()->id,
         ]);
 
+        foreach ($sales->salesDetail as $key => $value) {
+            $inventori = \App\Models\Inventori::find($value->inventori_id);
+
+            $inventori->stock = $inventori->stock + $value->qty;
+
+            $inventori->save();
+        }
+
         $sales->salesDetail()->delete();
+
 
         foreach ($request->field as $key => $value) {
             $sales->salesDetail()->create([
@@ -99,10 +121,52 @@ class SalesController extends Controller
                 'qty' => $value['qty'],
                 'price' => $value['price'],
             ]);
+
+            $inventori = \App\Models\Inventori::find($value['inventori_id']);
+
+            if ($inventori->stock >= $value['qty']) {
+                $inventori->stock = $inventori->stock - $value['qty'];
+            } else {
+                Toast::message('Stock is not enough')->autoDismiss(5);
+                return redirect()->back();
+            }
+
+            $inventori->save();
         }
 
         Toast::message('Data Sales Successfully Updated')->autoDismiss(5);
 
         return redirect()->route('sales.index');
+    }
+
+    public function destroy(Sales $sales)
+    {
+        $this->authorize('delete', $sales);
+
+        $sales = $sales->with('salesDetail')->find($sales->id);
+
+        foreach ($sales->salesDetail as $key => $value) {
+            $inventori = \App\Models\Inventori::find($value->inventori_id);
+
+            $inventori->stock = $inventori->stock + $value->qty;
+
+            $inventori->save();
+        }
+
+        $sales->delete();
+
+        Toast::message('Data Sales Successfully Deleted')->autoDismiss(5);
+
+        return redirect()->route('sales.index');
+    }
+
+    public function history()
+    {
+        $this->spladeTitle('Sales History');
+        $this->authorize('viewAny', \App\Models\Sales::class);
+
+        return view('pages.sales.history', [
+            'sales' => SaleHistory::class,
+        ]);
     }
 }

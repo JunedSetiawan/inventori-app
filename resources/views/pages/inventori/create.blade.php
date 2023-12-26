@@ -11,5 +11,7 @@
         <x-splade-input name="price" label="Price" type="number" min="1000" />
         <x-splade-input name="stock" label="Stock" type="number" min="0" />
 
+        <x-splade-submit label="Save" />
+
     </x-splade-form>
 </x-app-layout>

@@ -4,7 +4,9 @@ namespace App\Tables;
 
 use App\Models\Purchase;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Excel;
 use ProtoneMedia\Splade\AbstractTable;
+use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\SpladeTable;
 
 class Purchases extends AbstractTable
@@ -26,7 +28,9 @@ class Purchases extends AbstractTable
      */
     public function authorize(Request $request)
     {
-        return true;
+        if ($request->user()->isPurchase() || $request->user()->isSuperAdmin() || $request->user()->can('manage-report') || $request->user()->can('delete', Purchase::class)) {
+            return true;
+        }
     }
 
     /**
@@ -36,7 +40,7 @@ class Purchases extends AbstractTable
      */
     public function for()
     {
-        return Purchase::query();
+        return Purchase::query()->latest();
     }
 
     /**
@@ -48,14 +52,24 @@ class Purchases extends AbstractTable
     public function configure(SpladeTable $table)
     {
         $table
-            ->withGlobalSearch(columns: ['id'])
-            ->column('id', sortable: true);
+            ->withGlobalSearch(columns: ['number'])
+            ->column('number', 'Number')
+            ->column('date', 'Date', sortable: true)
+            ->column('user.name', 'User')
+            ->column('Actions')
+            ->export('Excel export', 'export.xlsx', Excel::XLSX)
+            ->export('CSV export', 'export.csv', Excel::CSV)
+            ->export('PDF export', 'export.pdf', Excel::DOMPDF)
+            ->rowSlideover(fn (Purchase $purchase) => route('purchase.show', [
+                'purchase' => $purchase,
+            ]));
 
-            // ->searchInput()
-            // ->selectFilter()
-            // ->withGlobalSearch()
 
-            // ->bulkAction()
-            // ->export()
+        // ->searchInput()
+        // ->selectFilter()
+        // ->withGlobalSearch()
+
+        // ->bulkAction()
+        // ->export()
     }
 }

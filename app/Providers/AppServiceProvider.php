@@ -45,6 +45,14 @@ class AppServiceProvider extends ServiceProvider
             return $user->isSuperAdmin() || $user->isPurchase() || $user->isManager();
         });
 
+        // permission for view history
+        Gate::define('view-sales-history', function (User $user) {
+            return $user->isSales();
+        });
+        Gate::define('view-purchase-history', function (User $user) {
+            return $user->isPurchase();
+        });
+
         // Permission for manage Apps
         Gate::define('manage-inventory', function (User $user) {
             return $user->isSuperAdmin();

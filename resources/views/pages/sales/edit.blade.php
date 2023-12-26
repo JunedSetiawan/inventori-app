@@ -4,7 +4,8 @@
     </x-slot>
 
 
-    <form class="bg-base-100 space-y-3 p-5 " action="{{ route('sales.store') }}" method="post">
+    <form class="bg-base-100 space-y-3 p-5 " action="{{ route('sales.update', $sale->id) }}" method="POST">
+        @method('PUT')
         @csrf
         <span class=" flex flex-col">
             <label for=""> Date Sale</label>

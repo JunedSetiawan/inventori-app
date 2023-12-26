@@ -59,6 +59,7 @@ class SidebarContent
                             ],
                             [
                                 'title' => 'Sale Histories',
+                                'permissions' => 'view-sales-history',
                                 'route' => 'sales.history',
                                 'icon' => '',
                             ],
@@ -82,6 +83,7 @@ class SidebarContent
                             ],
                             [
                                 'title' => 'Purchase Histories',
+                                'permissions' => 'view-purchase-history',
                                 'route' => 'purchase.history',
                                 'icon' => '',
                             ],
