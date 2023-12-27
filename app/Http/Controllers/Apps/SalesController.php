@@ -11,6 +11,11 @@ use ProtoneMedia\Splade\Facades\Toast;
 
 class SalesController extends Controller
 {
+    /**
+     * Display the sales index page.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index()
     {
         $this->spladeTitle('Sales');
@@ -20,11 +25,22 @@ class SalesController extends Controller
         ]);
     }
 
+    /**
+     * Display the form for creating a new sales record.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create()
     {
         return view('pages.sales.create');
     }
 
+    /**
+     * Store a newly created sales record.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
         $this->authorize('create', \App\Models\Sales::class);
@@ -48,9 +64,6 @@ class SalesController extends Controller
                 'price' => $value['price'],
             ]);
 
-            // stock in inventory
-            // Price will be reduced upon purchase
-
             $inventori = \App\Models\Inventori::find($value['inventori_id']);
 
             if ($inventori->stock >= $value['qty']) {
@@ -67,6 +80,12 @@ class SalesController extends Controller
         return redirect()->route('sales.index');
     }
 
+    /**
+     * Display the details of a sales record.
+     *
+     * @param Sales $sales The sales record to display.
+     * @return \Illuminate\View\View The view displaying the sales details.
+     */
     public function show(Sales $sales)
     {
         $this->spladeTitle('Detail Sales');
@@ -78,6 +97,12 @@ class SalesController extends Controller
         ]);
     }
 
+    /**
+     * Edit a sales record.
+     *
+     * @param Sales $sales The sales record to be edited.
+     * @return \Illuminate\View\View The view for editing the sales record.
+     */
     public function edit(Sales $sales)
     {
         $this->spladeTitle('Edit Sales');
@@ -89,9 +114,19 @@ class SalesController extends Controller
         ]);
     }
 
+    /**
+     * Update the specified sales record in the database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Sales  $sales
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, Sales $sales)
     {
+        // Check if the user is authorized to update the sales record
         $this->authorize('update', $sales);
+
+        // Validate the request data
         $request->validate([
             'field.*.inventori_id' => ['exists:inventories,id', 'required'],
             'date' => ['date', 'required'],
@@ -99,11 +134,13 @@ class SalesController extends Controller
             'field.*.price' => ['numeric', 'required'],
         ]);
 
+        // Update the sales record with the new date and user ID
         $sales->update([
             'date' => $request->date,
             'user_id' => auth()->user()->id,
         ]);
 
+        // Update the stock of each inventory item associated with the sales record
         foreach ($sales->salesDetail as $key => $value) {
             $inventori = \App\Models\Inventori::find($value->inventori_id);
 
@@ -112,9 +149,10 @@ class SalesController extends Controller
             $inventori->save();
         }
 
+        // Delete all existing sales details associated with the sales record
         $sales->salesDetail()->delete();
 
-
+        // Create new sales details based on the request data
         foreach ($request->field as $key => $value) {
             $sales->salesDetail()->create([
                 'inventori_id' => $value['inventori_id'],
@@ -124,6 +162,7 @@ class SalesController extends Controller
 
             $inventori = \App\Models\Inventori::find($value['inventori_id']);
 
+            // Check if the inventory stock is sufficient for the requested quantity
             if ($inventori->stock >= $value['qty']) {
                 $inventori->stock = $inventori->stock - $value['qty'];
             } else {
@@ -134,11 +173,19 @@ class SalesController extends Controller
             $inventori->save();
         }
 
+        // Display a success message
         Toast::message('Data Sales Successfully Updated')->autoDismiss(5);
 
+        // Redirect to the sales index page
         return redirect()->route('sales.index');
     }
 
+    /**
+     * Delete a sales record and update the inventory stock accordingly.
+     *
+     * @param Sales $sales The sales record to be deleted.
+     * @return \Illuminate\Http\RedirectResponse The redirect response to the sales index page.
+     */
     public function destroy(Sales $sales)
     {
         $this->authorize('delete', $sales);
@@ -160,6 +207,11 @@ class SalesController extends Controller
         return redirect()->route('sales.index');
     }
 
+    /**
+     * Display the sales history.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function history()
     {
         $this->spladeTitle('Sales History');

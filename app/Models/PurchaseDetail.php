@@ -16,16 +16,31 @@ class PurchaseDetail extends Model
         'price',
     ];
 
+    /**
+     * Get the purchase that owns the purchase detail.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function purchase()
     {
         return $this->belongsTo(Purchase::class);
     }
 
+    /**
+     * Get the inventori that owns the purchase detail.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function inventori()
     {
         return $this->belongsTo(Inventori::class);
     }
 
+    /**
+     * Get the subtotal attribute for the purchase detail.
+     *
+     * @return float
+     */
     public function getSubTotalAttribute()
     {
         return $this->qty * $this->price;

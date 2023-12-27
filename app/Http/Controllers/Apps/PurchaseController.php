@@ -11,6 +11,11 @@ use ProtoneMedia\Splade\Facades\Toast;
 
 class PurchaseController extends Controller
 {
+    /**
+     * Display the index page for purchases.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $this->spladeTitle('Purchase');
@@ -20,11 +25,22 @@ class PurchaseController extends Controller
         ]);
     }
 
+    /**
+     * Display the form for creating a new purchase.
+     *
+     * @return \Illuminate\View\View
+     */
     public function create()
     {
         return view('pages.purchase.create');
     }
 
+    /**
+     * Store a newly created purchase in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
         $this->authorize('create', \App\Models\Purchase::class);
@@ -48,9 +64,6 @@ class PurchaseController extends Controller
                 'price' => $value['price'],
             ]);
 
-            // stock in inventory 
-            // Price will be reduced upon purchase
-
             $inventori = \App\Models\Inventori::find($value['inventori_id']);
 
             $inventori->stock = $inventori->stock + $value['qty'];
@@ -63,6 +76,12 @@ class PurchaseController extends Controller
         return redirect()->route('purchase.index');
     }
 
+    /**
+     * Display the details of a purchase.
+     *
+     * @param  Purchase  $purchase
+     * @return \Illuminate\View\View
+     */
     public function show(Purchase $purchase)
     {
         $this->spladeTitle('Detail Purchase');
@@ -74,6 +93,12 @@ class PurchaseController extends Controller
         ]);
     }
 
+    /**
+     * Edit a purchase.
+     *
+     * @param  Purchase  $purchase
+     * @return \Illuminate\View\View
+     */
     public function edit(Purchase $purchase)
     {
         $this->spladeTitle('Edit Purchase');
@@ -85,6 +110,13 @@ class PurchaseController extends Controller
         ]);
     }
 
+    /**
+     * Update a purchase record.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Purchase  $purchase
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, Purchase $purchase)
     {
         $this->authorize('update', $purchase);
@@ -118,9 +150,6 @@ class PurchaseController extends Controller
                 'price' => $value['price'],
             ]);
 
-            // stock in inventory\
-            // Price will be reduced upon purchase
-
             $inventori = \App\Models\Inventori::find($value['inventori_id']);
 
             $inventori->stock = $inventori->stock + $value['qty'];
@@ -133,6 +162,12 @@ class PurchaseController extends Controller
         return redirect()->route('purchase.index');
     }
 
+    /**
+     * Delete a purchase and update the inventory stock accordingly.
+     *
+     * @param  Purchase  $purchase  The purchase to be deleted
+     * @return \Illuminate\Http\RedirectResponse  The redirect response to the purchase index page
+     */
     public function destroy(Purchase $purchase)
     {
         $this->authorize('delete', $purchase);
@@ -154,6 +189,11 @@ class PurchaseController extends Controller
         return redirect()->route('purchase.index');
     }
 
+    /**
+     * Display the history of purchases.
+     *
+     * @return \Illuminate\View\View
+     */
     public function history()
     {
         $this->spladeTitle('History Purchase');

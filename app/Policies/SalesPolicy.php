@@ -33,7 +33,11 @@ class SalesPolicy
      */
     public function update(User $user, Sales $sales): bool
     {
-        if ($user->isSuperAdmin() || $user->isSales()) {
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        if ($user->isSales()) {
             return $user->id == $sales->user_id;
         }
     }
@@ -43,11 +47,11 @@ class SalesPolicy
      */
     public function delete(User $user, Sales $sales): bool
     {
-        if ($user->isSuperAdmin() || $user->isSales()) {
+        if ($user->isSuperAdmin()) {
             return true;
         }
 
-        if (!$user->isSuperAdmin() && $user->isSales()) {
+        if ($user->isSales()) {
             return $user->id == $sales->user_id;
         }
     }

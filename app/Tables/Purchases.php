@@ -56,10 +56,11 @@ class Purchases extends AbstractTable
             ->column('number', 'Number')
             ->column('date', 'Date', sortable: true)
             ->column('user.name', 'User')
-            ->column('Actions')
-            ->export('Excel export', 'export.xlsx', Excel::XLSX)
-            ->export('CSV export', 'export.csv', Excel::CSV)
-            ->export('PDF export', 'export.pdf', Excel::DOMPDF)
+            ->column('purchaseDetail.subTotal', 'subTotal', as: fn ($subTotal, $user) => 'Rp. ' . number_format((float) $subTotal, 0, ',', '.'), hidden: true)
+            ->column('Actions', exportAs: false)
+            ->export('Excel export', 'Purchase.xlsx', Excel::XLSX)
+            ->export('CSV export', 'Purchase.csv', Excel::CSV)
+            ->export('PDF export', 'Purchase.pdf', Excel::DOMPDF)
             ->rowSlideover(fn (Purchase $purchase) => route('purchase.show', [
                 'purchase' => $purchase,
             ]));

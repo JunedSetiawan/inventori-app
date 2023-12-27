@@ -59,8 +59,10 @@ class Inventories extends AbstractTable
             ->column('stock', 'Stock')
             ->column('price', 'Price', as: fn ($price, $user) => 'Rp. ' . number_format($price, 0, ',', '.'))
             ->column('created_at', 'Created At', as: fn ($created_at, $user) => $created_at->format('d M Y'))
-            ->column('Actions')
-            ->export('Excel export', 'export.xlsx', Excel::XLSX)
+            ->column('Actions', exportAs: false)
+            ->export('Excel export', 'Inventory.xlsx', Excel::XLSX)
+            ->export('Csv export', 'Inventory.csv', Excel::CSV)
+            ->export('Pdf export', 'Inventory.pdf', Excel::DOMPDF)
 
             ->bulkAction('Delete', fn ($inventori) => $inventori->delete(), confirm: true, after: fn () => Toast::message('Inventori deleted successfully')->autoDismiss(5));
 

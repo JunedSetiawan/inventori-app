@@ -19,6 +19,13 @@ class Inventori extends Model
         'stock',
     ];
 
+    /**
+     * The boot method is called when the model is being booted.
+     * It registers an event listener for the 'creating' event,
+     * which generates a unique code for the inventori before it is created.
+     *
+     * @return void
+     */
     protected static function boot()
     {
         parent::boot();

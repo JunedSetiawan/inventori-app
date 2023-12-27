@@ -13,6 +13,11 @@ use ProtoneMedia\Splade\Facades\Toast;
 
 class InventoriController extends Controller
 {
+    /**
+     * Display a listing of the inventories.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index(): View
     {
         $this->spladeTitle('Inventori');
@@ -23,6 +28,11 @@ class InventoriController extends Controller
         ]);
     }
 
+    /**
+     * Show the form for creating a new inventory.
+     *
+     * @return \Illuminate\View\View
+     */
     public function create(): View
     {
         $this->spladeTitle('Create Inventori');
@@ -31,7 +41,12 @@ class InventoriController extends Controller
         return view('pages.inventori.create');
     }
 
-    // store data inventori
+    /**
+     * Store a newly created inventory in storage.
+     *
+     * @param  \App\Http\Requests\InventoriRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(InventoriRequest $request)
     {
         $this->authorize('create', \App\Models\Inventori::class);
@@ -43,6 +58,12 @@ class InventoriController extends Controller
         return redirect()->route('inventory.index');
     }
 
+    /**
+     * Show the form for editing the specified inventory.
+     *
+     * @param  \App\Models\Inventori  $inventori
+     * @return \Illuminate\View\View
+     */
     public function edit(Inventori $inventori): View
     {
         $this->spladeTitle('Edit Inventori');
@@ -52,6 +73,13 @@ class InventoriController extends Controller
         ]);
     }
 
+    /**
+     * Update the specified inventori in storage.
+     *
+     * @param  \App\Http\Requests\InventoriRequest  $request
+     * @param  \App\Models\Inventori  $inventori
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(InventoriRequest $request, Inventori $inventori): RedirectResponse
     {
         $this->authorize('update', $inventori);
@@ -63,6 +91,12 @@ class InventoriController extends Controller
         return redirect()->route('inventory.index');
     }
 
+    /**
+     * Retrieves inventory data based on search query.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getInventory(Request $request)
     {
         $search = $request->search;

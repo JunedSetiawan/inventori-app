@@ -16,16 +16,31 @@ class SalesDetail extends Model
         'price',
     ];
 
+    /**
+     * Get the sales that owns the sales detail.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function sales()
     {
         return $this->belongsTo(Sales::class);
     }
 
+    /**
+     * Get the inventori that owns the sales detail.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function inventori()
     {
         return $this->belongsTo(Inventori::class);
     }
 
+    /**
+     * Get the subtotal attribute.
+     *
+     * @return float
+     */
     public function getSubTotalAttribute()
     {
         return $this->qty * $this->price;
