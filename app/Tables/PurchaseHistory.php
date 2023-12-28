@@ -59,12 +59,5 @@ class PurchaseHistory extends AbstractTable
             ->rowSlideover(fn (Purchase $purchase) => route('sales.show', [
                 'sales' => $purchase,
             ]));
-
-        // ->searchInput()
-        // ->selectFilter()
-        // ->withGlobalSearch()
-
-        // ->bulkAction()
-        // ->export()
     }
 }

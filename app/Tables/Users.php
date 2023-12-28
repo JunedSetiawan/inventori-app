@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
 use ProtoneMedia\Splade\AbstractTable;
+use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\SpladeTable;
 
 class Users extends AbstractTable
@@ -27,7 +28,9 @@ class Users extends AbstractTable
      */
     public function authorize(Request $request)
     {
-        return true;
+        if ($request->user()->isSuperAdmin() || $request->user()->can('manage-report') || $request->user()->can('delete', User::class)) {
+            return true;
+        }
     }
 
     /**
@@ -37,7 +40,7 @@ class Users extends AbstractTable
      */
     public function for()
     {
-        return User::query();
+        return User::query()->where('id', '!=', auth()->user()->id)->latest();
     }
 
     /**
@@ -51,34 +54,26 @@ class Users extends AbstractTable
         $table
             ->column('name', sortable: true, searchable: true)
             ->column('email', sortable: true, searchable: true)
-            ->column('created_at', sortable: true)
-            ->column('edit')
+            ->column('role', sortable: true, searchable: true)
+            ->column('created_at', sortable: true, as: fn ($date) => $date->format('d F Y'))
+            ->column('Actions', exportAs: false)
             ->searchInput('email')
             ->withGlobalSearch('name')
-            ->selectFilter('email', [
-                '.com' => '.com',
-                '.net' => '.net'
-            ])
-            ->bulkAction(
-                label: 'Touch timestamp',
-                each: fn (User $user) => $user->touch(),
-                confirm: 'Touch projects',
-                confirmText: 'Are you sure you want to touch the projects?',
-                confirmButton: 'Yes, touch all selected rows!',
-                cancelButton: 'No, do not touch!',
-            )
             ->export(
-                'export',
-                'project.xlsx',
+                'Export Excel',
+                'User.xlsx',
                 Excel::XLSX
             )
+            ->export(
+                'Export Csv',
+                'User.csv',
+                Excel::CSV
+            )
+            ->export(
+                'Export Pdf',
+                'User.pdf',
+                Excel::DOMPDF
+            )
             ->paginate(5);
-
-        // ->searchInput()
-        // ->selectFilter()
-        // ->withGlobalSearch()
-
-        // ->bulkAction()
-        // ->export()
     }
 }

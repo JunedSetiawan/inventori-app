@@ -29,6 +29,13 @@ class SidebarContent
                         'icon' => @svg('heroicon-o-home'),
                         'menus' => [],
                     ],
+                    [
+                        'title' => 'Users',
+                        'permissions' => 'view-user',
+                        'route' => 'user.index',
+                        'icon' => @svg('heroicon-o-user-group'),
+                        'menus' => [],
+                    ],
                 ],
             ],
             [

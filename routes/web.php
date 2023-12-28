@@ -44,5 +44,6 @@ Route::middleware('splade')->group(function () {
     require __DIR__ . '/apps/inventory.php';
     require __DIR__ . '/apps/purchase.php';
     require __DIR__ . '/apps/sales.php';
+    require __DIR__ . '/apps/user.php';
     require __DIR__ . '/auth.php';
 });

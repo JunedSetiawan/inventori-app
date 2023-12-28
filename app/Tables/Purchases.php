@@ -64,13 +64,5 @@ class Purchases extends AbstractTable
             ->rowSlideover(fn (Purchase $purchase) => route('purchase.show', [
                 'purchase' => $purchase,
             ]));
-
-
-        // ->searchInput()
-        // ->selectFilter()
-        // ->withGlobalSearch()
-
-        // ->bulkAction()
-        // ->export()
     }
 }

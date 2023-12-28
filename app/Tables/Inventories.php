@@ -62,10 +62,6 @@ class Inventories extends AbstractTable
             ->column('Actions', exportAs: false)
             ->export('Excel export', 'Inventory.xlsx', Excel::XLSX)
             ->export('Csv export', 'Inventory.csv', Excel::CSV)
-            ->export('Pdf export', 'Inventory.pdf', Excel::DOMPDF)
-
-            ->bulkAction('Delete', fn ($inventori) => $inventori->delete(), confirm: true, after: fn () => Toast::message('Inventori deleted successfully')->autoDismiss(5));
-
-        // ->rowSlideover(fn (Inventori $inventori) => route('inventory.edit', ['id' => $inventori->id]))
+            ->export('Pdf export', 'Inventory.pdf', Excel::DOMPDF);
     }
 }

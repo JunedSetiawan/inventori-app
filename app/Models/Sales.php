@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Sales extends Model
 {
@@ -22,7 +24,7 @@ class Sales extends Model
      * This model represents a sales transaction in the application.
      * It includes methods for generating a unique sales number and defining relationships with other models.
      */
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -48,7 +50,7 @@ class Sales extends Model
      * This method defines a belongsTo relationship with the User model.
      * It returns the user associated with the sales transaction.
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -59,7 +61,7 @@ class Sales extends Model
      * This method defines a hasMany relationship with the SalesDetail model.
      * It returns the sales details associated with the sales transaction.
      */
-    public function salesDetail()
+    public function salesDetail(): HasMany
     {
         return $this->hasMany(SalesDetail::class);
     }

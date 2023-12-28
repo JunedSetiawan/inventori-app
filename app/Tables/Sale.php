@@ -65,12 +65,5 @@ class Sale extends AbstractTable
             ->rowSlideover(fn (Sales $sales) => route('sales.show', [
                 'sales' => $sales,
             ]));
-
-        // ->searchInput()
-        // ->selectFilter()
-        // ->withGlobalSearch()
-
-        // ->bulkAction()
-        // ->export()
     }
 }

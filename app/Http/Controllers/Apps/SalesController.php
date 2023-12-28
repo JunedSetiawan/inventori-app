@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Sales;
 use App\Tables\Sale;
 use App\Tables\SaleHistory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use ProtoneMedia\Splade\Facades\Toast;
 
 class SalesController extends Controller
@@ -16,7 +18,7 @@ class SalesController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function index()
+    public function index(): View
     {
         $this->spladeTitle('Sales');
         $this->authorize('viewAny', \App\Models\Sales::class);
@@ -30,7 +32,7 @@ class SalesController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create()
+    public function create(): View
     {
         return view('pages.sales.create');
     }
@@ -41,7 +43,7 @@ class SalesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', \App\Models\Sales::class);
 
@@ -86,7 +88,7 @@ class SalesController extends Controller
      * @param Sales $sales The sales record to display.
      * @return \Illuminate\View\View The view displaying the sales details.
      */
-    public function show(Sales $sales)
+    public function show(Sales $sales): View
     {
         $this->spladeTitle('Detail Sales');
 
@@ -103,7 +105,7 @@ class SalesController extends Controller
      * @param Sales $sales The sales record to be edited.
      * @return \Illuminate\View\View The view for editing the sales record.
      */
-    public function edit(Sales $sales)
+    public function edit(Sales $sales): View
     {
         $this->spladeTitle('Edit Sales');
 
@@ -121,7 +123,7 @@ class SalesController extends Controller
      * @param  \App\Models\Sales  $sales
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Sales $sales)
+    public function update(Request $request, Sales $sales): RedirectResponse
     {
         // Check if the user is authorized to update the sales record
         $this->authorize('update', $sales);
@@ -186,7 +188,7 @@ class SalesController extends Controller
      * @param Sales $sales The sales record to be deleted.
      * @return \Illuminate\Http\RedirectResponse The redirect response to the sales index page.
      */
-    public function destroy(Sales $sales)
+    public function destroy(Sales $sales): RedirectResponse
     {
         $this->authorize('delete', $sales);
 
@@ -212,7 +214,7 @@ class SalesController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function history()
+    public function history(): View
     {
         $this->spladeTitle('Sales History');
         $this->authorize('viewAny', \App\Models\Sales::class);

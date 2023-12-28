@@ -44,6 +44,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('view-purchase', function (User $user) {
             return $user->isSuperAdmin() || $user->isPurchase() || $user->isManager();
         });
+        Gate::define('view-user', function (User $user) {
+            return $user->isSuperAdmin() || $user->isManager();
+        });
 
         // permission for view history
         Gate::define('view-sales-history', function (User $user) {
@@ -62,6 +65,9 @@ class AppServiceProvider extends ServiceProvider
         });
         Gate::define('manage-purchase', function (User $user) {
             return $user->isSuperAdmin() || $user->isPurchase();
+        });
+        Gate::define('manage-user', function (User $user) {
+            return $user->isSuperAdmin();
         });
     }
 }

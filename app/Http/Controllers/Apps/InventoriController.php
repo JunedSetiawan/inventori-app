@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Apps\InventoriRequest;
 use App\Models\Inventori;
 use App\Tables\Inventories;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -47,7 +48,7 @@ class InventoriController extends Controller
      * @param  \App\Http\Requests\InventoriRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(InventoriRequest $request)
+    public function store(InventoriRequest $request): RedirectResponse
     {
         $this->authorize('create', \App\Models\Inventori::class);
 
@@ -67,6 +68,7 @@ class InventoriController extends Controller
     public function edit(Inventori $inventori): View
     {
         $this->spladeTitle('Edit Inventori');
+        $this->authorize('update', $inventori);
 
         return view('pages.inventori.edit', [
             'inventori' => $inventori,
@@ -92,12 +94,30 @@ class InventoriController extends Controller
     }
 
     /**
+     * Remove the specified inventori from storage.
+     *
+     * @param  \App\Models\Inventori  $inventori
+     * @return \Illuminate\Http\RedirectResponse
+     */
+
+    public function destroy(Inventori $inventori): RedirectResponse
+    {
+        $this->authorize('delete', $inventori);
+
+        $inventori->delete();
+
+        Toast::message('Inventori deleted successfully')->autoDismiss(5);
+
+        return redirect()->route('inventory.index');
+    }
+
+    /**
      * Retrieves inventory data based on search query.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getInventory(Request $request)
+    public function getInventory(Request $request): JsonResponse
     {
         $search = $request->search;
 

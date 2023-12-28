@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PurchaseDetail extends Model
 {
@@ -21,7 +22,7 @@ class PurchaseDetail extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function purchase()
+    public function purchase(): BelongsTo
     {
         return $this->belongsTo(Purchase::class);
     }
@@ -31,7 +32,7 @@ class PurchaseDetail extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function inventori()
+    public function inventori(): BelongsTo
     {
         return $this->belongsTo(Inventori::class);
     }
@@ -41,7 +42,7 @@ class PurchaseDetail extends Model
      *
      * @return float
      */
-    public function getSubTotalAttribute()
+    public function getSubTotalAttribute(): float
     {
         return $this->qty * $this->price;
     }

@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Purchase;
 use App\Tables\PurchaseHistory;
 use App\Tables\Purchases;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use ProtoneMedia\Splade\Facades\Toast;
 
 class PurchaseController extends Controller
@@ -16,7 +18,7 @@ class PurchaseController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(): View
     {
         $this->spladeTitle('Purchase');
         $this->authorize('viewAny', \App\Models\Purchase::class);
@@ -30,8 +32,10 @@ class PurchaseController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(): View
     {
+        $this->spladeTitle('Create Purchase');
+
         return view('pages.purchase.create');
     }
 
@@ -41,7 +45,7 @@ class PurchaseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', \App\Models\Purchase::class);
 
@@ -82,7 +86,7 @@ class PurchaseController extends Controller
      * @param  Purchase  $purchase
      * @return \Illuminate\View\View
      */
-    public function show(Purchase $purchase)
+    public function show(Purchase $purchase): View
     {
         $this->spladeTitle('Detail Purchase');
 
@@ -99,9 +103,10 @@ class PurchaseController extends Controller
      * @param  Purchase  $purchase
      * @return \Illuminate\View\View
      */
-    public function edit(Purchase $purchase)
+    public function edit(Purchase $purchase): View
     {
         $this->spladeTitle('Edit Purchase');
+        $this->authorize('update', $purchase);
 
         $purchase = Purchase::with('purchaseDetail')->find($purchase->id);
 
@@ -117,7 +122,7 @@ class PurchaseController extends Controller
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Purchase $purchase)
+    public function update(Request $request, Purchase $purchase): RedirectResponse
     {
         $this->authorize('update', $purchase);
 
@@ -168,7 +173,7 @@ class PurchaseController extends Controller
      * @param  Purchase  $purchase  The purchase to be deleted
      * @return \Illuminate\Http\RedirectResponse  The redirect response to the purchase index page
      */
-    public function destroy(Purchase $purchase)
+    public function destroy(Purchase $purchase): RedirectResponse
     {
         $this->authorize('delete', $purchase);
 
@@ -194,7 +199,7 @@ class PurchaseController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function history()
+    public function history(): View
     {
         $this->spladeTitle('History Purchase');
         $this->authorize('viewAny', \App\Models\Purchase::class);

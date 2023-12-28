@@ -47,11 +47,14 @@
                     </details>
                 </li>
             @else
-                <li>
-                    <x-nav-link :href="route($menu['route'])" :active="request()->routeIs($menu['route'])">
-                        {{ $menu['icon'] }} <span>{{ $menu['title'] }}</span>
-                    </x-nav-link>
-                </li>
+                @if (empty($menu['permissions']) ||
+                        auth()->user()->can($menu['permissions']))
+                    <li>
+                        <x-nav-link :href="route($menu['route'])" :active="request()->routeIs($menu['route'])">
+                            {{ $menu['icon'] }} <span>{{ $menu['title'] }} </span>
+                        </x-nav-link>
+                    </li>
+                @endif
             @endif
             {{-- @endcan --}}
         @endforeach
