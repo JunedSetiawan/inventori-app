@@ -1,6 +1,6 @@
 ## Web System Inventory App
 
-### Inventory, Purchase, Sales, Manager management website with .RBAC implementation that runs well
+- Inventory, Purchase, Sales, Manager management website with .RBAC implementation that runs well
 
 Using
 
